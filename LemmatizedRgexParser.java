@@ -8,13 +8,13 @@ import text.helper.Properties;
 import dragon.nlp.tool.lemmatiser.EngLemmatiser;
 
 /**
- * This class is used to parse the text.
+ * This parsers implements lemmatized regex parser
  * @author Apurv
  *
  */
-public class SimpleRegexParser implements Parser{
+public class LemmatizedRgexParser  implements Parser{
 	
-	private boolean STEMMING;
+	private boolean LEMMATIZATION;
 	
 	private String regex;
 	
@@ -26,21 +26,21 @@ public class SimpleRegexParser implements Parser{
 	
 	private EngLemmatiser lemmatiser = new EngLemmatiser(Properties.lemmatiserPath, true, false);
 	
-	public SimpleRegexParser(String regex, boolean stemming, boolean removeStopWords){
+	public LemmatizedRgexParser(String regex, boolean lemmatization, boolean removeStopWords){
 		this.regex = regex;
-		this.STEMMING = stemming;
+		this.LEMMATIZATION = lemmatization;
 		this.REMOVE_STOP_WORDS = removeStopWords;
 	}
 	
-	public SimpleRegexParser(String regex, boolean stemming){
+	public LemmatizedRgexParser(String regex, boolean lemmatization){
 		this.regex = regex;
-		this.STEMMING = stemming;
+		this.LEMMATIZATION = lemmatization;
 		this.REMOVE_STOP_WORDS = false;
 	}
 	
-	public SimpleRegexParser(String regex){
+	public LemmatizedRgexParser(String regex){
 		this.regex = regex;
-		this.STEMMING = false;
+		this.LEMMATIZATION = false;
 		this.REMOVE_STOP_WORDS = false;
 	}
 	
@@ -66,16 +66,16 @@ public class SimpleRegexParser implements Parser{
 				String s = splits[i].toLowerCase();
 				s.trim();
 				//if stop word has to be removed
-				if(this.REMOVE_STOP_WORDS && this.STEMMING){
-					s = stem(s);
+				if(this.REMOVE_STOP_WORDS && this.LEMMATIZATION){
 					if(stopWords == null){//if stopword set is not populated
 						throw new Exception("populate stop words");
 					}else{
 						if(!stopWords.contains(s) && !s.equals(""))
 							resultList.add(s);
-					}	
+					}
+					s = getTermByTermWordnet(s);
 				}
-				if(this.REMOVE_STOP_WORDS && !this.STEMMING){
+				if(this.REMOVE_STOP_WORDS && !this.LEMMATIZATION){
 					if(stopWords == null){//if stopword set is not populated
 						throw new Exception("populate stop words");
 					}else{
@@ -83,11 +83,11 @@ public class SimpleRegexParser implements Parser{
 							resultList.add(s);
 					}						
 				}
-				if(this.STEMMING && !s.equals("") && !this.REMOVE_STOP_WORDS){//if stemming has to be performed 
-					s = stem(s);
+				if(this.LEMMATIZATION && !s.equals("") && !this.REMOVE_STOP_WORDS){//if stemming has to be performed 
+					s = getTermByTermWordnet(s);
 					resultList.add(s);
 				}
-				if(!this.REMOVE_STOP_WORDS && !this.STEMMING)
+				if(!this.REMOVE_STOP_WORDS && !this.LEMMATIZATION)
 					resultList.add(s);
 				
 			}
@@ -97,15 +97,7 @@ public class SimpleRegexParser implements Parser{
 		
 		return resultList;
 	}	
-	
-	/**
-	 * Stemmer using lucene
-	 * @param text
-	 * @return
-	 */
-	public String stem(String text){
-		return Stemmer.stem(text);
-    }
+
 	/**
 	 * THis methods stems the word such that new word is in the English dictionary
 	 * @param s
@@ -126,5 +118,4 @@ public class SimpleRegexParser implements Parser{
         }
         return rootString.toString().trim();
 	}
-
 }

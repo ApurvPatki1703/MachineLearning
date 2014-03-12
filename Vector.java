@@ -1,6 +1,5 @@
-package diego.dictionary;
+package text.vectorization;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -199,6 +198,8 @@ public class Vector {
 		while(iter.hasNext()){
 			Entry<Integer, Double> e = iter.next();
 			if(dict.contains(map.get(e.getKey())))
+				System.out.println(map.get(e.getKey()));
+				System.out.println(dict.idf(map.get(e.getKey())));
 				v.put(e.getKey(), dict.idf(map.get(e.getKey())) * e.getValue());
 		}
 		return v;
