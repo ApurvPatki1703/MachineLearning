@@ -14,7 +14,7 @@ For operating any machine learning algorithm on text, first text has to be vecto
 2) Add the terms from parser to dictionary using Dictionary.java. Dictionary represents the terms in vocabulary. It maps the terms in vocabulary to an integer index for vectorization.
 3) Once the dictionary is created, use Vector.java to vectorize each sentence/ text unit/ as per requirement. You can create a wrapper and use compose your class by having Vector as a member. Vector has Integer key and Double value. This integer corresponds to mapping of term in dictionary. Hence the Vector is sparse vector which is very important in text processing. Populate Vector in the wrapper class using the dictionary.
 4) Write the required instances to file.
-5) Load file in matlab and run algorithms.
+5) Load file in matlab and run algorithms. You can use Nive Bayes in this directory, just change the filenames to your output file names.
 
 NOTES:
 ========
